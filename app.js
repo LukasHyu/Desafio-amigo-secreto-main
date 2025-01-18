@@ -1,36 +1,46 @@
-//O principal objetivo deste desafio é fortalecer suas habilidades em lógica de programação. Aqui você deverá desenvolver a lógica para resolver o problema.
-// Função para adicionar amigo à lista
-function adicionarAmigo() {
-    let nomeAmigo = document.getElementById('amigo'); // Pega o valor do input da pagina HTML
-    let listaAmigos = document.getElementById('listaAmigos'); // Pega a lista de amigos da pagina HTML
+// Array para armazenar os amigos
+let amigos = [];
 
-    let nome = nomeAmigo.value.trim(); // Remove os espaços em branco do final do nome
+// Função para adicionar amigo ao array e atualizar a lista 
+function adicionarAmigo() {
+    let nomeAmigo = document.getElementById('amigo'); // Pega o valor do input da página HTML
+    let listaAmigos = document.getElementById('listaAmigos'); // Pega a lista de amigos da página HTML
+
+    let nome = nomeAmigo.value.trim(); // Remove espaços em branco no início e no fim do nome
     if (nome) {
-        let li = document.createElement('li'); // Cria um elemento chamdo li
-        li.textContent = nome; // Adiciona o nome do amigo na li
-        listaAmigos.appendChild(li); // Adiciona o nome do amigo na lista de amigos
-        nomeAmigo.value = ''; // Limpa o nome na pagina HTML
+        amigos.push(nome); // Adiciona o nome ao array
+        atualizarLista(); // Atualiza a lista
+        nomeAmigo.value = ''; // Limpa o campo de entrada
+        nomeAmigo.focus(); // Retorna o foco para o input
     } else {
-        alert('Informe o nome do amigo!'); // Alerta para quando clicar em adcionar sem informar o nome
+        alert('Informe o nome do amigo!'); // Exibe alerta caso o campo esteja vazio
     }
 }
 
-// Função para fazer o sorteio dos nomes da lista
+// Função para atualizar a lista de amigos
+function atualizarLista() {
+    let listaAmigos = document.getElementById('listaAmigos');
+    listaAmigos.innerHTML = ''; // Limpa a lista
 
-function sortearAmigo() {
-    let listaAmigos = document.getElementById('listaAmigos'); // Pega a lista de amigos da pagina HTML
-    let resultado = document.getElementById('resultado'); // Pega o resultado da pagina HTML
-    let amigos = listaAmigos.getElementsByTagName('li'); // Pega os nomes da lista de amigos
-    if (amigos.length > 0) { // Verifica se a lista de amigos não está vazia
-        let indiceSorteado = Math.floor(Math.random() * amigos.length); // Sorteia um dos nomes da lista aleatoriamente
-        let nomeSorteado = amigos[indiceSorteado].textContent; // Pega o nome sorteado
-
-        // Remover o nome sorteado da lista
-        listaAmigos.removeChild(amigos[indiceSorteado]);
-
-    // Exibe o nome sorteado
-    resultado.innerHTML = `<li>Amigo sorteado: <strong>${nomeSorteado}</strong></li>`; // Exibe o nome sorteado
-} else {
-    resultado.innerHTML = '<li>A lista está vazia. Adicione amigos primeiro!</li>'; // Exibe uma mensagem caso a lista esteja vazia
+    // Adiciona cada amigo do array como um item na lista
+    amigos.forEach((amigo) => {
+        let li = document.createElement('li'); // Cria um elemento <li>
+        li.textContent = amigo; // Define o texto do <li> com o nome do amigo
+        listaAmigos.appendChild(li); // Adiciona o <li> à lista
+    });
 }
+
+// Função para sortear um amigo do array e remover o nome sorteado
+function sortearAmigo() {
+    let resultado = document.getElementById('resultado'); // Pega o elemento para exibir o resultado
+
+    if (amigos.length > 0) {
+        let indiceSorteado = Math.floor(Math.random() * amigos.length); // Sorteia um índice aleatório
+        let nomeSorteado = amigos.splice(indiceSorteado, 1)[0]; // Remove o amigo sorteado do array e obtém o nome
+
+        atualizarLista(); // Atualiza a lista após a remoção
+        resultado.innerHTML = `<li>Amigo sorteado: <strong>${nomeSorteado}</strong></li>`; // Exibe o nome sorteado
+    } else {
+        resultado.innerHTML = '<li>A lista está vazia. Adicione amigos primeiro!</li>'; // Exibe mensagem se o array estiver vazio
+    }
 }
